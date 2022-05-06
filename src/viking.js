@@ -14,19 +14,113 @@ class Soldier {
   }
 }
 
-const newSoldier = new Soldier (100, 100);
-newSoldier.receiveDamage(20);
+const newSoldier = new Soldier (100, 30);
+// newSoldier.receiveDamage(20);
 
 // Viking
-class Viking {}
+class Viking extends Soldier {
+  constructor (name, health, strength) {
+    super(health, strength);
+    this.name = name;
+  }
+  receiveDamage(damage) {
+    console.log(`The viking/'s previous health was: ${this.health}.`)
+    this.health = this.health - damage;
+    console.log(`The viking/'s current health is: ${this.health}.`)
+    if(this.health > 0) {
+      return `${this.name} has received ${damage} points of damage`;
+    } else {
+      return `${this.name} has died in act of combat`;
+    }
+  }
+  battleCry() {
+    return `Odin Owns You All!`;
+  }
+}
+
+const newViking = new Viking ("Bjorn", 100, 50);
+// newViking.receiveDamage(30);
 
 // Saxon
-class Saxon {}
+class Saxon extends Soldier {
+  // constructor () {
+  //   super(health, strength);
+  // }
+  receiveDamage(damage) {
+    console.log(`The saxon/'s previous health was: ${this.health}.`)
+    this.health = this.health - damage;
+    console.log(`The saxon/'s current health is: ${this.health}.`)
+    if(this.health > 0) {
+      return `A Saxon has received ${damage} points of damage`;
+    } else {
+      return `A Saxon has died in combat`;
+    }
+
+  }
+}
+
+const newSaxon = new Saxon (100, 50);
+// console.log(newSaxon.receiveDamage(30));
 
 // War
-class War {}
+class War {
+  constructor () {
+    this.vikingArmy = [];
+    this.saxonArmy = [];
+  }
+  addViking(Viking) {
+    this.vikingArmy.push(Viking);
+  }
+  addSaxon(Saxon) {
+    this.saxonArmy.push(Saxon);
+  }
+  vikingAttack() {
+    let randomViking = this.vikingArmy[Math.floor(Math.random() * this.vikingArmy.length)];
+    let randomSaxon = this.saxonArmy[Math.floor(Math.random() * this.saxonArmy.length)];
+    console.log(randomSaxon.health);
+    let result = randomSaxon.receiveDamage(randomViking.strength)
+    // this.saxonArmy[Math.floor(Math.random() * this.saxonArmy.length)].receiveDamage(this.vikingArmy[Math.floor(Math.random() * this.vikingArmy.length)].strength);
+    console.log(randomSaxon.health);
+    if (randomSaxon.health <= 0){
+      this.saxonArmy.splice(this.saxonArmy.indexOf(randomSaxon));
+    }
+    return result;
+  }
+  saxonAttack() {
+    let randomViking = this.vikingArmy[Math.floor(Math.random() * this.vikingArmy.length)];
+    let randomSaxon = this.saxonArmy[Math.floor(Math.random() * this.saxonArmy.length)];
+    console.log(randomViking.health);
+    let result = randomViking.receiveDamage(randomSaxon.strength)
+    // this.saxonArmy[Math.floor(Math.random() * this.saxonArmy.length)].receiveDamage(this.vikingArmy[Math.floor(Math.random() * this.vikingArmy.length)].strength);
+    console.log(randomViking.health);
+    if (randomViking.health <= 0){
+      this.vikingArmy.splice(this.vikingArmy.indexOf(randomViking));
+    }
+    return result;
+  }
+  showStatus() {
+    if(this.saxonArmy.length === 0) {
+      return "Vikings have won the war of the century!"
+    } else if (this.vikingArmy.length === 0) {
+      return "Saxons have fought for their lives and survived another day..."
+    } else if ((this.saxonArmy.lenght != 0) && (this.vikingArmy.length != 0)) {
+      return "Vikings and Saxons are still in the thick of battle."
+    }
+  }
+} 
 
 
+const ragnarok = new War ();
+ragnarok.addViking(newViking);
+ragnarok.addSaxon(newSaxon);
+console.log(ragnarok);
+
+ragnarok.vikingAttack();
+ragnarok.saxonAttack();
+
+console.log(ragnarok);
+
+console.log(ragnarok.showStatus());
 
 // The following is required to make unit tests work.
 /* Environment setup. Do not modify the below code. */
